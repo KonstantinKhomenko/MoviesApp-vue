@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Loader />
     <PosterBg :poster="posterBg" />
     <MoviesList :list="moviesList" @changePoster="onChangePoster" />
     <MoviesPagination
@@ -12,38 +13,40 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import MoviesList from "./components/MoviesList";
-import PosterBg from "./components/PosterBg";
-import MoviesPagination from "./components/MoviesPagination";
+import { mapActions, mapGetters } from 'vuex';
+import MoviesList from './components/MoviesList';
+import PosterBg from './components/PosterBg';
+import MoviesPagination from './components/MoviesPagination';
+import Loader from '@/components/Loader';
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     MoviesList,
     PosterBg,
-    MoviesPagination
+    MoviesPagination,
+    Loader
   },
   data: () => ({
-    posterBg: ""
+    posterBg: ''
   }),
   computed: {
-    ...mapGetters("movies", [
-      "moviesList",
-      "currentPage",
-      "moviesPerPage",
-      "moviesLength"
+    ...mapGetters('movies', [
+      'moviesList',
+      'currentPage',
+      'moviesPerPage',
+      'moviesLength'
     ])
   },
   watch: {
-    "$route.query": {
-      handler: "onPageQueryChange",
+    '$route.query': {
+      handler: 'onPageQueryChange',
       immediate: true,
       deep: true
     }
   },
   methods: {
-    ...mapActions("movies", ["changeCurrentPage"]),
+    ...mapActions('movies', ['changeCurrentPage']),
     onPageQueryChange({ page = 1 }) {
       this.changeCurrentPage(Number(page));
     },

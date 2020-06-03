@@ -1,6 +1,6 @@
-import IDs from "@/store/mock/imdb_top250";
-import axios from "../../plugins/axios";
-import mutations from "../../store/mutations";
+import IDs from '@/store/mock/imdb_top250';
+import axios from '../../plugins/axios';
+import mutations from '../../store/mutations';
 
 function serializeResponse(movies) {
   return movies.reduce((acc, movie) => {
@@ -37,12 +37,13 @@ const moviesStore = {
   actions: {
     initMoviesStore: {
       handler({ dispatch }) {
-        dispatch("fetchMovies");
+        dispatch('fetchMovies');
       },
       root: true
     },
-    async fetchMovies({ getters, commit }) {
+    async fetchMovies({ getters, commit, dispatch }) {
       try {
+        dispatch('toggleLoader', true, { root: true });
         const { currentPage, moviesPerPage, slicedIDs } = getters;
         const from = currentPage * moviesPerPage - moviesPerPage;
         const to = currentPage * moviesPerPage;
@@ -54,11 +55,13 @@ const moviesStore = {
         commit(MOVIES, movies);
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch('toggleLoader', false, { root: true });
       }
     },
     changeCurrentPage({ dispatch, commit }, page) {
       commit(CURRENT_PAGE, page);
-      dispatch("fetchMovies");
+      dispatch('fetchMovies');
     }
   }
 };
