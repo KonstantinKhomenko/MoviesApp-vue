@@ -11,7 +11,13 @@
           <b-button size="md" block variant="outline-light">Edit</b-button>
         </div>
         <div class="col pl-2">
-          <b-button size="md" block variant="outline-light">Remove</b-button>
+          <b-button
+            size="md"
+            block
+            variant="outline-light"
+            @click="emitRemoveEvent"
+            >Remove</b-button
+          >
         </div>
       </div>
     </div>
@@ -20,18 +26,28 @@
 
 <script>
 export default {
-  name: "MovieItem",
+  name: 'MovieItem',
   props: {
     movie: {
       type: Object,
       required: true
     }
   },
+
   computed: {
     posterBg() {
       return {
-        "background-image": `url(${this.movie.Poster})`
+        'background-image': `url(${this.movie.Poster})`
       };
+    }
+  },
+
+  methods: {
+    emitRemoveEvent() {
+      this.$emit('removeItem', {
+        id: this.movie.imdbID,
+        title: this.movie.Title
+      });
     }
   }
 };
